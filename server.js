@@ -58,13 +58,7 @@ const swaggerHandler = (req, res, next) => {
   return swaggerUi.setup(swaggerSpec, swaggerOptions)(req, res, next);
 };
 
-app.use('/api-docs', (req, res, next) => {
-  const protocol = req.get('x-forwarded-proto') || req.protocol;
-  const host = req.get('x-forwarded-host') || req.get('host');
-  const swaggerSpec = createSwaggerSpec(`${protocol}://${host}`);
-
-  return swaggerUi.serveFiles(swaggerSpec, swaggerOptions)(req, res, next);
-});
+app.use('/api-docs', swaggerUi.serve);
 app.get('/api-docs', (req, res) => {
   res.redirect(301, '/api-docs/');
 });
@@ -74,6 +68,23 @@ app.get('/api-docs.json', (req, res) => {
   const host = req.get('x-forwarded-host') || req.get('host');
 
   res.json(createSwaggerSpec(`${protocol}://${host}`));
+});
+
+app.get('/', (req, res) => {
+  res.redirect(301, '/api-docs/');
+});
+
+// Health Check Route
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'Server is running',
+    timestamp: new Date().toISOString(),
+  });
+});
+
+app.get('/favicon.ico', (req, res) => {
+  res.status(204).end();
 });
 
 // Routes
@@ -88,29 +99,6 @@ app.use('/api/transportation-services', require('./routes/transportationServiceR
 app.use('/api/programs/hajj-umrah', require('./routes/hajjUmrahRoutes'));
 app.use('/api/programs/explore-kingdom', require('./routes/exploreKingdomRoutes'));
 app.use('/api/programs/explore-usa', require('./routes/exploreUSARoutes'));
-
-app.get('/', (req, res) => {
-  const protocol = req.get('x-forwarded-proto') || req.protocol;
-  const host = req.get('x-forwarded-host') || req.get('host');
-
-  res.status(200).json({
-    success: true,
-    name: 'Trep Backend API',
-    version: '1.0.0',
-    documentation: `${protocol}://${host}/api-docs/`,
-    openapi: `${protocol}://${host}/api-docs.json`,
-    health: `${protocol}://${host}/health`,
-  });
-});
-
-// Health Check Route
-app.get('/health', (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: 'Server is running',
-    timestamp: new Date().toISOString(),
-  });
-});
 
 // 404 Handler
 app.use((req, res) => {
