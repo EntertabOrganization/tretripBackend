@@ -8,6 +8,74 @@ const exploreKingdomController = require('../controllers/exploreKingdomControlle
  *   post:
  *     summary: Create a new Explore the Kingdom booking
  *     tags: [Programs - Explore Kingdom]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - fullName
+ *               - emailAddress
+ *               - phoneNumber
+ *               - preferredContactMethod
+ *               - tripStartDate
+ *               - tripEndDate
+ *               - numberOfTravelers
+ *               - tripType
+ *               - preferredGuidingLanguage
+ *               - domesticFlightsNeeded
+ *               - hotelAccommodationNeeded
+ *             properties:
+ *               fullName:
+ *                 type: string
+ *                 example: Sara Khaled
+ *               emailAddress:
+ *                 type: string
+ *                 format: email
+ *                 example: sara@example.com
+ *               phoneNumber:
+ *                 type: string
+ *                 example: +966500000000
+ *               preferredContactMethod:
+ *                 type: string
+ *                 enum: [Email, Phone Number, Whatsapp]
+ *               tripStartDate:
+ *                 type: string
+ *                 format: date
+ *               tripEndDate:
+ *                 type: string
+ *                 format: date
+ *               numberOfTravelers:
+ *                 type: integer
+ *                 example: 4
+ *               tripType:
+ *                 type: string
+ *                 enum: [One Way, Round Trip, Hourly]
+ *               preferredDestinations:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   enum: [Al Souda, Ragal Almaa, AlUla, Mecca, Diriyah, Medina, Other]
+ *                 example: [AlUla, Diriyah]
+ *               otherDestination:
+ *                 type: string
+ *                 example: Tabuk
+ *               preferredGuidingLanguage:
+ *                 type: string
+ *                 enum: [Arabic, English, French, Spanish, German]
+ *               budgetRange:
+ *                 type: string
+ *                 example: 5000-7000 SAR
+ *               domesticFlightsNeeded:
+ *                 type: boolean
+ *                 example: true
+ *               hotelAccommodationNeeded:
+ *                 type: boolean
+ *                 example: true
+ *               notesAndSpecialRequests:
+ *                 type: string
+ *                 example: Need family-friendly itinerary
  */
 router.post('/', exploreKingdomController.createExploreKingdom);
 

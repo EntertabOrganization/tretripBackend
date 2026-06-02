@@ -19,6 +19,7 @@ const exploreUSASchema = new mongoose.Schema(
     preferredContactMethod: {
       type: String,
       enum: ['Email', 'Phone Number', 'Whatsapp'],
+      required: true,
     },
     tripStartDate: {
       type: Date,
@@ -35,6 +36,7 @@ const exploreUSASchema = new mongoose.Schema(
     tripType: {
       type: String,
       enum: ['One Way', 'Round Trip', 'Hourly'],
+      required: true,
     },
     preferredDestinations: [{
       type: String,
@@ -44,8 +46,35 @@ const exploreUSASchema = new mongoose.Schema(
         'White House', 'Other'
       ],
     }],
-    otherDestination: String,
-    budgetRange: String,
+    otherDestination: {
+      type: String,
+      trim: true,
+    },
+    preferredGuidingLanguage: {
+      type: String,
+      enum: ['English', 'Arabic', 'French', 'Spanish', 'German'],
+      required: true,
+    },
+    budgetRange: {
+      type: String,
+      trim: true,
+    },
+    domesticFlightsNeeded: {
+      type: Boolean,
+      required: true,
+    },
+    hotelAccommodationNeeded: {
+      type: Boolean,
+      required: true,
+    },
+    notesAndSpecialRequests: {
+      type: String,
+      trim: true,
+    },
+    needAccommodation: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

@@ -23,7 +23,7 @@ const hajjUmrahSchema = new mongoose.Schema(
     passportNumber: {
       type: String,
       required: true,
-      unique: true,
+      trim: true,
     },
     pilgrimageDate: {
       type: Date,
@@ -37,8 +37,12 @@ const hajjUmrahSchema = new mongoose.Schema(
     groupSize: {
       type: String,
       enum: ['1 Person', '2-4 People', '5-8 People', '9-12 People', '13+ People'],
+      required: true,
     },
-    notes: String,
+    notes: {
+      type: String,
+      trim: true,
+    },
   },
   { timestamps: true }
 );

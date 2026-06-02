@@ -19,6 +19,7 @@ const exploreKingdomSchema = new mongoose.Schema(
     preferredContactMethod: {
       type: String,
       enum: ['Email', 'Phone Number', 'Whatsapp'],
+      required: true,
     },
     tripStartDate: {
       type: Date,
@@ -35,6 +36,7 @@ const exploreKingdomSchema = new mongoose.Schema(
     tripType: {
       type: String,
       enum: ['One Way', 'Round Trip', 'Hourly'],
+      required: true,
     },
     preferredDestinations: [{
       type: String,
@@ -44,11 +46,24 @@ const exploreKingdomSchema = new mongoose.Schema(
     preferredGuidingLanguage: {
       type: String,
       enum: ['Arabic', 'English', 'French', 'Spanish', 'German'],
+      required: true,
     },
-    budgetRange: String,
-    domesticFlightsNeeded: Boolean,
-    hotelAccommodationNeeded: Boolean,
-    notesAndSpecialRequests: String,
+    budgetRange: {
+      type: String,
+      trim: true,
+    },
+    domesticFlightsNeeded: {
+      type: Boolean,
+      required: true,
+    },
+    hotelAccommodationNeeded: {
+      type: Boolean,
+      required: true,
+    },
+    notesAndSpecialRequests: {
+      type: String,
+      trim: true,
+    },
   },
   { timestamps: true }
 );
