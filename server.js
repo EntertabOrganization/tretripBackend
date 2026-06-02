@@ -58,7 +58,17 @@ const swaggerHandler = (req, res, next) => {
   return swaggerUi.setup(swaggerSpec, swaggerOptions)(req, res, next);
 };
 
-app.use('/api-docs', swaggerUi.serve, swaggerHandler);
+app.use('/api-docs', (req, res, next) => {
+  const protocol = req.get('x-forwarded-proto') || req.protocol;
+  const host = req.get('x-forwarded-host') || req.get('host');
+  const swaggerSpec = createSwaggerSpec(`${protocol}://${host}`);
+
+  return swaggerUi.serveFiles(swaggerSpec, swaggerOptions)(req, res, next);
+});
+app.get('/api-docs', (req, res) => {
+  res.redirect(301, '/api-docs/');
+});
+app.get('/api-docs/', swaggerHandler);
 app.get('/api-docs.json', (req, res) => {
   const protocol = req.get('x-forwarded-proto') || req.protocol;
   const host = req.get('x-forwarded-host') || req.get('host');
