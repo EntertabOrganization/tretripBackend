@@ -5,27 +5,55 @@ const eventSchema = new mongoose.Schema(
     organization: {
       type: String,
       required: true,
+      trim: true,
     },
-    position: String,
+    position: {
+      type: String,
+      required: true,
+      trim: true,
+    },
     eventName: {
       type: String,
       required: true,
+      trim: true,
     },
     eventType: {
       type: String,
       enum: ['Corporate', 'Wedding', 'Conference', 'Exhibition', 'Cultural Event', 'Private Party', 'Other'],
       required: true,
     },
-    theme: String,
-    preferredDates: [Date],
-    duration: String,
+    theme: {
+      type: String,
+      trim: true,
+    },
+    preferredDate: {
+      type: Date,
+      required: true,
+    },
+    duration: {
+      type: String,
+      required: true,
+      trim: true,
+    },
     expectedAttendees: {
       type: String,
       enum: ['1-50', '51-100', '101-250', '251-500', '501-1000', '1000+'],
+      required: true,
     },
-    targetAudience: String,
-    preferredVenue: String,
-    city: String,
+    targetAudience: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    preferredVenue: {
+      type: String,
+      trim: true,
+    },
+    city: {
+      type: String,
+      required: true,
+      trim: true,
+    },
     country: {
       type: String,
       enum: [
@@ -36,23 +64,45 @@ const eventSchema = new mongoose.Schema(
         'Philippines', 'Indonesia', 'Pakistan', 'Bangladesh', 'Sri Lanka', 'Egypt', 'South Africa',
         'Nigeria', 'Kenya'
       ],
+      required: true,
     },
     indoorOutdoor: {
       type: String,
       enum: ['Indoor', 'Outdoor', 'Both'],
+      required: true,
     },
-    venueSuggestionsNeeded: Boolean,
-    bookingSupportNeeded: Boolean,
-    coreServices: [{
+    venueSuggestionsNeeded: {
+      type: Boolean,
+      required: true,
+    },
+    bookingSupportNeeded: {
+      type: Boolean,
+      required: true,
+    },
+    coreServices: [
+      {
+        type: String,
+        enum: ['Venue Booking', 'A/V Setup', 'Catering', 'Stage Design'],
+      },
+    ],
+    additionalServices: [
+      {
+        type: String,
+        enum: ['Branding & Printing', 'Decoration', 'Entertainment/Speakers', 'Guest Management', 'Transportation', 'Security', 'Photography/Videography', 'Other'],
+      },
+    ],
+    additionalServicesOther: {
       type: String,
-      enum: ['Venue Booking', 'A/V Setup', 'Catering', 'Stage Design'],
-    }],
-    additionalServices: [{
+      trim: true,
+    },
+    estimatedBudget: {
+      type: Number,
+      min: 0,
+    },
+    additionalNotes: {
       type: String,
-      enum: ['Branding & Printing', 'Decoration', 'Entertainment/Speakers', 'Guest Management', 'Transportation', 'Security', 'Photography/Videography', 'Other'],
-    }],
-    estimatedBudget: Number,
-    additionalNotes: String,
+      trim: true,
+    },
   },
   { timestamps: true }
 );

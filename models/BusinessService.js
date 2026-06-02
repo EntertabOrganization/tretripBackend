@@ -2,47 +2,69 @@ const mongoose = require('mongoose');
 
 const businessServiceSchema = new mongoose.Schema(
   {
-    gender: {
-      type: String,
-      enum: ['Male', 'Female'],
+    dateOfBirth: {
+      type: Date,
       required: true,
     },
     passportNumber: {
       type: String,
       required: true,
-      unique: true,
+      trim: true,
+    },
+    gender: {
+      type: String,
+      enum: ['Male', 'Female'],
+      required: true,
     },
     countryOfDeparture: {
       type: String,
-      enum: ['United States', 'Canada', 'United Kingdom', 'Australia', 'Germany', 'France', 'Other'],
       required: true,
+      trim: true,
     },
-    destinationCountry: {
+    destinationCountryCity: {
       type: String,
-      enum: ['Turkey', 'United Arab Emirates', 'Thailand', 'Mexico', 'Costa Rica', 'Germany', 'Other'],
       required: true,
+      trim: true,
     },
     jobTitle: {
       type: String,
       required: true,
+      trim: true,
     },
     companyName: {
       type: String,
       required: true,
+      trim: true,
     },
-    companyIndustry: String,
-    preferredDepartureDate: Date,
-    preferredReturnDate: Date,
+    companyIndustry: {
+      type: String,
+      trim: true,
+    },
+    preferredDepartureDate: {
+      type: Date,
+      required: true,
+    },
+    preferredReturnDate: {
+      type: Date,
+    },
     travelAlone: {
       type: Boolean,
       required: true,
     },
-    specialInstructions: String,
-    requiredSupportServices: [{
+    specialInstructions: {
       type: String,
-      enum: ['Venue Booking', 'A/V Setup', 'Branding & Printing', 'Decoration', 'Catering', 'Stage Design', 'Transportation', 'Security'],
-    }],
-    additionalNotes: String,
+      trim: true,
+    },
+    requiredSupportServices: [
+      {
+        type: String,
+        enum: ['Venue Booking', 'A/V Setup', 'Branding & Printing', 'Decoration', 'Catering', 'Stage Design', 'Transportation', 'Security'],
+      },
+    ],
+    additionalNotes: {
+      type: String,
+      trim: true,
+    },
   },
   { timestamps: true }
 );

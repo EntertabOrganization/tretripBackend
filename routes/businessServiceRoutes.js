@@ -8,6 +8,68 @@ const businessServiceController = require('../controllers/businessServiceControl
  *   post:
  *     summary: Create a new business service request
  *     tags: [Business Services]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - dateOfBirth
+ *               - passportNumber
+ *               - gender
+ *               - countryOfDeparture
+ *               - destinationCountryCity
+ *               - jobTitle
+ *               - companyName
+ *               - preferredDepartureDate
+ *               - travelAlone
+ *             properties:
+ *               dateOfBirth:
+ *                 type: string
+ *                 format: date
+ *               passportNumber:
+ *                 type: string
+ *                 example: A12345678
+ *               gender:
+ *                 type: string
+ *                 enum: [Male, Female]
+ *               countryOfDeparture:
+ *                 type: string
+ *                 example: Egypt
+ *               destinationCountryCity:
+ *                 type: string
+ *                 example: Riyadh, Saudi Arabia
+ *               jobTitle:
+ *                 type: string
+ *                 example: Sales Director
+ *               companyName:
+ *                 type: string
+ *                 example: Tretrip
+ *               companyIndustry:
+ *                 type: string
+ *                 example: Travel and tourism
+ *               preferredDepartureDate:
+ *                 type: string
+ *                 format: date
+ *               preferredReturnDate:
+ *                 type: string
+ *                 format: date
+ *               travelAlone:
+ *                 type: boolean
+ *                 example: true
+ *               specialInstructions:
+ *                 type: string
+ *                 example: Need support for a corporate event and hotel near venue
+ *               requiredSupportServices:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   enum: [Venue Booking, A/V Setup, Branding & Printing, Decoration, Catering, Stage Design, Transportation, Security]
+ *                 example: [Venue Booking, A/V Setup, Transportation]
+ *               additionalNotes:
+ *                 type: string
+ *                 example: VIP airport pickup required
  */
 router.post('/', businessServiceController.createBusinessService);
 
