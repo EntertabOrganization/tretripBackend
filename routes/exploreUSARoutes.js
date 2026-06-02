@@ -79,6 +79,11 @@ const exploreUSAController = require('../controllers/exploreUSAController');
  *               needAccommodation:
  *                 type: boolean
  *                 example: true
+ *     responses:
+ *       201:
+ *         description: Explore the USA booking created successfully
+ *       400:
+ *         description: Validation error
  */
 router.post('/', exploreUSAController.createExploreUSA);
 
@@ -88,6 +93,9 @@ router.post('/', exploreUSAController.createExploreUSA);
  *   get:
  *     summary: Get all Explore the USA bookings
  *     tags: [Programs - Explore USA]
+ *     responses:
+ *       200:
+ *         description: List of Explore the USA bookings
  */
 router.get('/', exploreUSAController.getAllExploreUSA);
 
@@ -103,6 +111,11 @@ router.get('/', exploreUSAController.getAllExploreUSA);
  *         required: true
  *         schema:
  *           type: string
+ *     responses:
+ *       200:
+ *         description: Explore the USA booking details
+ *       404:
+ *         description: Explore the USA booking not found
  */
 router.get('/:id', exploreUSAController.getExploreUSAById);
 
@@ -118,6 +131,11 @@ router.get('/:id', exploreUSAController.getExploreUSAById);
  *         required: true
  *         schema:
  *           type: string
+ *     responses:
+ *       200:
+ *         description: Explore the USA booking updated successfully
+ *       404:
+ *         description: Explore the USA booking not found
  */
 router.put('/:id', exploreUSAController.updateExploreUSA);
 
@@ -133,6 +151,11 @@ router.put('/:id', exploreUSAController.updateExploreUSA);
  *         required: true
  *         schema:
  *           type: string
+ *     responses:
+ *       200:
+ *         description: Explore the USA booking deleted successfully
+ *       404:
+ *         description: Explore the USA booking not found
  */
 router.delete('/:id', exploreUSAController.deleteExploreUSA);
 

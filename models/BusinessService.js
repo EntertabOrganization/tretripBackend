@@ -2,6 +2,11 @@ const mongoose = require('mongoose');
 
 const businessServiceSchema = new mongoose.Schema(
   {
+    clientId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Client',
+      required: true,
+    },
     dateOfBirth: {
       type: Date,
       required: true,

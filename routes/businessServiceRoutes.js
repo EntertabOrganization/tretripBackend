@@ -15,6 +15,7 @@ const businessServiceController = require('../controllers/businessServiceControl
  *           schema:
  *             type: object
  *             required:
+ *               - clientId
  *               - dateOfBirth
  *               - passportNumber
  *               - gender
@@ -25,6 +26,9 @@ const businessServiceController = require('../controllers/businessServiceControl
  *               - preferredDepartureDate
  *               - travelAlone
  *             properties:
+ *               clientId:
+ *                 type: string
+ *                 example: 665c8c7c3d1b4f0012345678
  *               dateOfBirth:
  *                 type: string
  *                 format: date
@@ -70,6 +74,13 @@ const businessServiceController = require('../controllers/businessServiceControl
  *               additionalNotes:
  *                 type: string
  *                 example: VIP airport pickup required
+ *     responses:
+ *       201:
+ *         description: Business service request created successfully
+ *       400:
+ *         description: Validation error
+ *       404:
+ *         description: Client not found
  */
 router.post('/', businessServiceController.createBusinessService);
 
@@ -79,6 +90,9 @@ router.post('/', businessServiceController.createBusinessService);
  *   get:
  *     summary: Get all business service requests
  *     tags: [Business Services]
+ *     responses:
+ *       200:
+ *         description: List of business requests with linked client details
  */
 router.get('/', businessServiceController.getAllBusinessServices);
 
@@ -94,6 +108,11 @@ router.get('/', businessServiceController.getAllBusinessServices);
  *         required: true
  *         schema:
  *           type: string
+ *     responses:
+ *       200:
+ *         description: Business request with linked client details
+ *       404:
+ *         description: Business request not found
  */
 router.get('/:id', businessServiceController.getBusinessServiceById);
 
@@ -109,6 +128,11 @@ router.get('/:id', businessServiceController.getBusinessServiceById);
  *         required: true
  *         schema:
  *           type: string
+ *     responses:
+ *       200:
+ *         description: Business request updated successfully
+ *       404:
+ *         description: Business request or client not found
  */
 router.put('/:id', businessServiceController.updateBusinessService);
 
@@ -124,6 +148,11 @@ router.put('/:id', businessServiceController.updateBusinessService);
  *         required: true
  *         schema:
  *           type: string
+ *     responses:
+ *       200:
+ *         description: Business request deleted successfully
+ *       404:
+ *         description: Business request not found
  */
 router.delete('/:id', businessServiceController.deleteBusinessService);
 

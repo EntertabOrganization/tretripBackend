@@ -51,6 +51,11 @@ const hajjUmrahController = require('../controllers/hajjUmrahController');
  *               notes:
  *                 type: string
  *                 example: Need assistance for elderly traveler
+ *     responses:
+ *       201:
+ *         description: Hajj and Umrah booking created successfully
+ *       400:
+ *         description: Validation error
  */
 router.post('/', hajjUmrahController.createHajjUmrah);
 
@@ -60,6 +65,9 @@ router.post('/', hajjUmrahController.createHajjUmrah);
  *   get:
  *     summary: Get all Hajj & Umrah bookings
  *     tags: [Programs - Hajj & Umrah]
+ *     responses:
+ *       200:
+ *         description: List of Hajj and Umrah bookings
  */
 router.get('/', hajjUmrahController.getAllHajjUmrah);
 
@@ -75,6 +83,11 @@ router.get('/', hajjUmrahController.getAllHajjUmrah);
  *         required: true
  *         schema:
  *           type: string
+ *     responses:
+ *       200:
+ *         description: Hajj and Umrah booking details
+ *       404:
+ *         description: Hajj and Umrah booking not found
  */
 router.get('/:id', hajjUmrahController.getHajjUmrahById);
 
@@ -90,6 +103,11 @@ router.get('/:id', hajjUmrahController.getHajjUmrahById);
  *         required: true
  *         schema:
  *           type: string
+ *     responses:
+ *       200:
+ *         description: Hajj and Umrah booking updated successfully
+ *       404:
+ *         description: Hajj and Umrah booking not found
  */
 router.put('/:id', hajjUmrahController.updateHajjUmrah);
 
@@ -105,6 +123,11 @@ router.put('/:id', hajjUmrahController.updateHajjUmrah);
  *         required: true
  *         schema:
  *           type: string
+ *     responses:
+ *       200:
+ *         description: Hajj and Umrah booking deleted successfully
+ *       404:
+ *         description: Hajj and Umrah booking not found
  */
 router.delete('/:id', hajjUmrahController.deleteHajjUmrah);
 

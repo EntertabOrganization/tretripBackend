@@ -117,6 +117,13 @@ const travelTourismController = require('../controllers/travelTourismController'
  *               specialRequests:
  *                 type: string
  *                 example: Need baby seat and late hotel check-in
+ *     responses:
+ *       201:
+ *         description: Travel booking created successfully
+ *       400:
+ *         description: Validation error
+ *       404:
+ *         description: Client not found
  */
 router.post('/', travelTourismController.createTravelTourism);
 
@@ -126,6 +133,9 @@ router.post('/', travelTourismController.createTravelTourism);
  *   get:
  *     summary: Get all travel tourism bookings
  *     tags: [Travel Tourism]
+ *     responses:
+ *       200:
+ *         description: List of travel bookings with linked client details
  */
 router.get('/', travelTourismController.getAllTravelTourism);
 
@@ -144,6 +154,8 @@ router.get('/', travelTourismController.getAllTravelTourism);
  *     responses:
  *       200:
  *         description: Travel booking with linked client details
+ *       404:
+ *         description: Travel booking not found
  */
 router.get('/:id', travelTourismController.getTravelTourismById);
 
@@ -159,6 +171,11 @@ router.get('/:id', travelTourismController.getTravelTourismById);
  *         required: true
  *         schema:
  *           type: string
+ *     responses:
+ *       200:
+ *         description: Travel booking updated successfully
+ *       404:
+ *         description: Travel booking or client not found
  */
 router.put('/:id', travelTourismController.updateTravelTourism);
 
@@ -174,6 +191,11 @@ router.put('/:id', travelTourismController.updateTravelTourism);
  *         required: true
  *         schema:
  *           type: string
+ *     responses:
+ *       200:
+ *         description: Travel booking deleted successfully
+ *       404:
+ *         description: Travel booking not found
  */
 router.delete('/:id', travelTourismController.deleteTravelTourism);
 

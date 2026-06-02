@@ -76,6 +76,11 @@ const exploreKingdomController = require('../controllers/exploreKingdomControlle
  *               notesAndSpecialRequests:
  *                 type: string
  *                 example: Need family-friendly itinerary
+ *     responses:
+ *       201:
+ *         description: Explore the Kingdom booking created successfully
+ *       400:
+ *         description: Validation error
  */
 router.post('/', exploreKingdomController.createExploreKingdom);
 
@@ -85,6 +90,9 @@ router.post('/', exploreKingdomController.createExploreKingdom);
  *   get:
  *     summary: Get all Explore the Kingdom bookings
  *     tags: [Programs - Explore Kingdom]
+ *     responses:
+ *       200:
+ *         description: List of Explore the Kingdom bookings
  */
 router.get('/', exploreKingdomController.getAllExploreKingdom);
 
@@ -100,6 +108,11 @@ router.get('/', exploreKingdomController.getAllExploreKingdom);
  *         required: true
  *         schema:
  *           type: string
+ *     responses:
+ *       200:
+ *         description: Explore the Kingdom booking details
+ *       404:
+ *         description: Explore the Kingdom booking not found
  */
 router.get('/:id', exploreKingdomController.getExploreKingdomById);
 
@@ -115,6 +128,11 @@ router.get('/:id', exploreKingdomController.getExploreKingdomById);
  *         required: true
  *         schema:
  *           type: string
+ *     responses:
+ *       200:
+ *         description: Explore the Kingdom booking updated successfully
+ *       404:
+ *         description: Explore the Kingdom booking not found
  */
 router.put('/:id', exploreKingdomController.updateExploreKingdom);
 
@@ -130,6 +148,11 @@ router.put('/:id', exploreKingdomController.updateExploreKingdom);
  *         required: true
  *         schema:
  *           type: string
+ *     responses:
+ *       200:
+ *         description: Explore the Kingdom booking deleted successfully
+ *       404:
+ *         description: Explore the Kingdom booking not found
  */
 router.delete('/:id', exploreKingdomController.deleteExploreKingdom);
 

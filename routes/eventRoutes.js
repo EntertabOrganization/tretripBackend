@@ -15,6 +15,7 @@ const eventController = require('../controllers/eventController');
  *           schema:
  *             type: object
  *             required:
+ *               - clientId
  *               - organization
  *               - position
  *               - eventName
@@ -29,6 +30,9 @@ const eventController = require('../controllers/eventController');
  *               - venueSuggestionsNeeded
  *               - bookingSupportNeeded
  *             properties:
+ *               clientId:
+ *                 type: string
+ *                 example: 665c8c7c3d1b4f0012345678
  *               organization:
  *                 type: string
  *                 example: Tretrip
@@ -96,6 +100,13 @@ const eventController = require('../controllers/eventController');
  *               additionalNotes:
  *                 type: string
  *                 example: Need VIP guest handling and branded registration desk
+ *     responses:
+ *       201:
+ *         description: Event created successfully
+ *       400:
+ *         description: Validation error
+ *       404:
+ *         description: Client not found
  */
 router.post('/', eventController.createEvent);
 
@@ -105,6 +116,9 @@ router.post('/', eventController.createEvent);
  *   get:
  *     summary: Get all events
  *     tags: [Events]
+ *     responses:
+ *       200:
+ *         description: List of events with linked client details
  */
 router.get('/', eventController.getAllEvents);
 
@@ -120,6 +134,11 @@ router.get('/', eventController.getAllEvents);
  *         required: true
  *         schema:
  *           type: string
+ *     responses:
+ *       200:
+ *         description: Event with linked client details
+ *       404:
+ *         description: Event not found
  */
 router.get('/:id', eventController.getEventById);
 
@@ -135,6 +154,11 @@ router.get('/:id', eventController.getEventById);
  *         required: true
  *         schema:
  *           type: string
+ *     responses:
+ *       200:
+ *         description: Event updated successfully
+ *       404:
+ *         description: Event or client not found
  */
 router.put('/:id', eventController.updateEvent);
 
@@ -150,6 +174,11 @@ router.put('/:id', eventController.updateEvent);
  *         required: true
  *         schema:
  *           type: string
+ *     responses:
+ *       200:
+ *         description: Event deleted successfully
+ *       404:
+ *         description: Event not found
  */
 router.delete('/:id', eventController.deleteEvent);
 

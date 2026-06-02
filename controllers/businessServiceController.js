@@ -1,14 +1,29 @@
 const BusinessService = require('../models/BusinessService');
+const Client = require('../models/Client');
 
 // CREATE
 exports.createBusinessService = async (req, res) => {
   try {
+    const client = await Client.findById(req.body.clientId);
+    if (!client) {
+      return res.status(404).json({
+        success: false,
+        message: 'Client not found',
+      });
+    }
+
     const business = new BusinessService(req.body);
     await business.save();
+
+    const populatedBusiness = await BusinessService.findById(business._id).populate(
+      'clientId',
+      'fullName phoneNumber emailAddress status'
+    );
+
     res.status(201).json({
       success: true,
       message: 'Business Service request created successfully',
-      data: business,
+      data: populatedBusiness,
     });
   } catch (error) {
     res.status(400).json({
@@ -21,7 +36,10 @@ exports.createBusinessService = async (req, res) => {
 // READ ALL
 exports.getAllBusinessServices = async (req, res) => {
   try {
-    const businesses = await BusinessService.find();
+    const businesses = await BusinessService.find().populate(
+      'clientId',
+      'fullName phoneNumber emailAddress status'
+    );
     res.status(200).json({
       success: true,
       count: businesses.length,
@@ -38,7 +56,10 @@ exports.getAllBusinessServices = async (req, res) => {
 // READ ONE
 exports.getBusinessServiceById = async (req, res) => {
   try {
-    const business = await BusinessService.findById(req.params.id);
+    const business = await BusinessService.findById(req.params.id).populate(
+      'clientId',
+      'fullName phoneNumber emailAddress status'
+    );
     if (!business) {
       return res.status(404).json({
         success: false,
@@ -47,7 +68,10 @@ exports.getBusinessServiceById = async (req, res) => {
     }
     res.status(200).json({
       success: true,
-      data: business,
+      data: {
+        business,
+        client: business.clientId,
+      },
     });
   } catch (error) {
     res.status(400).json({
@@ -60,11 +84,21 @@ exports.getBusinessServiceById = async (req, res) => {
 // UPDATE
 exports.updateBusinessService = async (req, res) => {
   try {
+    if (req.body.clientId) {
+      const client = await Client.findById(req.body.clientId);
+      if (!client) {
+        return res.status(404).json({
+          success: false,
+          message: 'Client not found',
+        });
+      }
+    }
+
     const business = await BusinessService.findByIdAndUpdate(
       req.params.id,
       req.body,
       { new: true, runValidators: true }
-    );
+    ).populate('clientId', 'fullName phoneNumber emailAddress status');
     if (!business) {
       return res.status(404).json({
         success: false,
