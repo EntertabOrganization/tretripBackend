@@ -2,14 +2,11 @@ const mongoose = require('mongoose');
 
 const travelTourismSchema = new mongoose.Schema(
   {
-    // Traveler's Information
-    travelerName: {
-      type: String,
+    clientId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Client',
       required: true,
-      trim: true,
     },
-    
-    // Flight Details
     tripType: {
       type: String,
       enum: ['Multiple Destinations', 'Round Trip', 'One Way'],
@@ -23,50 +20,116 @@ const travelTourismSchema = new mongoose.Schema(
     leavingFrom: {
       type: String,
       required: true,
+      trim: true,
     },
     goingTo: {
       type: String,
       required: true,
+      trim: true,
     },
-    airline: String,
-    departingDate: Date,
-    stops: Number,
+    multipleDestinations: [
+      {
+        type: String,
+        trim: true,
+      },
+    ],
+    departingDate: {
+      type: Date,
+      required: true,
+    },
+    returnDate: {
+      type: Date,
+      required() {
+        return this.tripType === 'Round Trip';
+      },
+    },
+    airline: {
+      type: String,
+      trim: true,
+    },
+    stops: {
+      type: Number,
+      min: 0,
+      default: 0,
+    },
+    destinationFocus: {
+      type: String,
+      trim: true,
+    },
     adult: {
       type: Number,
+      min: 1,
       default: 1,
     },
-    children: Number,
-    infants: Number,
+    children: {
+      type: Number,
+      min: 0,
+      default: 0,
+    },
+    infants: {
+      type: Number,
+      min: 0,
+      default: 0,
+    },
 
-    // Hotel Details
-    destination: String,
+    preferredHotel: {
+      type: String,
+      trim: true,
+    },
+    roomType: {
+      type: String,
+      trim: true,
+    },
+    nights: {
+      type: Number,
+      min: 0,
+      default: 0,
+    },
     checkInDate: Date,
     checkOutDate: Date,
-    roomAdult: Number,
-    roomChildren: Number,
-    numberOfRooms: Number,
-    hotelRating: {
+    mealPreference: {
       type: String,
-      enum: ['1 Star', '2 Stars', '3 Stars', '4 Stars', '5 Stars'],
-    },
-    mealPlan: {
-      type: String,
-      enum: ['Room only', 'Breakfast included', 'Half Board', 'Full Board'],
+      trim: true,
     },
 
-    // Transfer Details
-    pickupLocation: String,
-    dropoffLocation: String,
+    pickupLocation: {
+      type: String,
+      trim: true,
+    },
+    dropoffLocation: {
+      type: String,
+      trim: true,
+    },
     pickupDate: Date,
-    pickupTime: String,
+    pickupTime: {
+      type: String,
+      trim: true,
+    },
 
-    // Car Rental Details
     carRentalPickupDate: Date,
     carRentalDropoffDate: Date,
-    carType: String,
-    driverAge: Number,
+    carType: {
+      type: String,
+      trim: true,
+    },
+    driverAge: {
+      type: Number,
+      min: 18,
+    },
+    specialRequests: {
+      type: String,
+      trim: true,
+    },
   },
   { timestamps: true }
 );
+
+travelTourismSchema.path('multipleDestinations').validate(function validateDestinations(value) {
+  if (this.tripType !== 'Multiple Destinations') {
+    return true;
+  }
+
+  return Array.isArray(value) && value.length > 0;
+}, 'multipleDestinations is required when tripType is Multiple Destinations.');
 
 module.exports = mongoose.model('TravelTourism', travelTourismSchema);
