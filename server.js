@@ -9,9 +9,6 @@ const swaggerSpec = require('./config/swagger');
 // Initialize Express
 const app = express();
 
-// Connect to MongoDB
-connectDB();
-
 // Middleware
 app.use(helmet({
   contentSecurityPolicy: {
@@ -77,7 +74,17 @@ app.use((err, req, res, next) => {
 
 // Start Server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(`Swagger documentation available at http://localhost:${PORT}`);
-});
+const startServer = async () => {
+  try {
+    await connectDB();
+
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+      console.log(`Swagger documentation available at http://localhost:${PORT}`);
+    });
+  } catch (error) {
+    process.exit(1);
+  }
+};
+
+startServer();
