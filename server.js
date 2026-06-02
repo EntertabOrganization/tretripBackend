@@ -1,8 +1,8 @@
 require('dotenv').config();
 const express = require('express');
+const path = require('path');
 const cors = require('cors');
 const helmet = require('helmet');
-const swaggerUiDist = require('swagger-ui-dist');
 const connectDB = require('./config/db');
 const createSwaggerSpec = require('./config/swagger');
 
@@ -27,9 +27,9 @@ app.use(helmet({
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use('/swagger-assets', express.static(path.join(__dirname, 'public', 'swagger-assets')));
 
 // Swagger Documentation
-const swaggerAssetPath = swaggerUiDist.getAbsoluteFSPath();
 const renderSwaggerPage = (req) => {
   const protocol = req.get('x-forwarded-proto') || req.protocol;
   const host = req.get('x-forwarded-host') || req.get('host');
@@ -42,6 +42,8 @@ const renderSwaggerPage = (req) => {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Trep Backend API Docs</title>
   <link rel="stylesheet" href="/swagger-assets/swagger-ui.css">
+  <link rel="icon" type="image/png" href="/swagger-assets/favicon-32x32.png" sizes="32x32">
+  <link rel="icon" type="image/png" href="/swagger-assets/favicon-16x16.png" sizes="16x16">
   <style>
     html {
       box-sizing: border-box;
@@ -101,7 +103,6 @@ const renderSwaggerPage = (req) => {
 </html>`;
 };
 
-app.use('/swagger-assets', express.static(swaggerAssetPath));
 app.get('/api-docs', (req, res) => {
   res.type('html').send(renderSwaggerPage(req));
 });
