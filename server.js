@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
-const swaggerUi = require('swagger-ui-express');
+const swaggerUiDist = require('swagger-ui-dist');
 const connectDB = require('./config/db');
 const createSwaggerSpec = require('./config/swagger');
 
@@ -29,16 +29,43 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Swagger Documentation
-const swaggerOptions = {
-  customSiteTitle: 'Trep Backend API Docs',
-  explorer: true,
-  customCss: `
+const swaggerAssetPath = swaggerUiDist.getAbsoluteFSPath();
+const renderSwaggerPage = (req) => {
+  const protocol = req.get('x-forwarded-proto') || req.protocol;
+  const host = req.get('x-forwarded-host') || req.get('host');
+  const specUrl = `${protocol}://${host}/api-docs.json`;
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trep Backend API Docs</title>
+  <link rel="stylesheet" href="/swagger-assets/swagger-ui.css">
+  <style>
+    html {
+      box-sizing: border-box;
+      overflow-y: scroll;
+    }
+
+    *,
+    *:before,
+    *:after {
+      box-sizing: inherit;
+    }
+
+    body {
+      margin: 0;
+      background: #f8fafc;
+    }
+
     .swagger-ui .topbar {
       background: linear-gradient(90deg, #0f172a, #1e293b);
       padding: 10px 0;
     }
 
-    .swagger-ui .topbar a span {
+    .swagger-ui .topbar a span,
+    .swagger-ui .topbar .download-url-wrapper label {
       color: #f8fafc;
       font-weight: 700;
       letter-spacing: 0.02em;
@@ -47,18 +74,40 @@ const swaggerOptions = {
     .swagger-ui .information-container {
       padding-bottom: 12px;
     }
-  `,
+  </style>
+</head>
+<body>
+  <div id="swagger-ui"></div>
+  <script src="/swagger-assets/swagger-ui-bundle.js"></script>
+  <script src="/swagger-assets/swagger-ui-standalone-preset.js"></script>
+  <script>
+    window.onload = function () {
+      window.ui = SwaggerUIBundle({
+        url: '${specUrl}',
+        dom_id: '#swagger-ui',
+        deepLinking: true,
+        presets: [
+          SwaggerUIBundle.presets.apis,
+          SwaggerUIStandalonePreset
+        ],
+        plugins: [
+          SwaggerUIBundle.plugins.DownloadUrl
+        ],
+        layout: 'StandaloneLayout'
+      });
+    };
+  </script>
+</body>
+</html>`;
 };
 
-const swaggerHandler = (req, res, next) => {
-  const protocol = req.get('x-forwarded-proto') || req.protocol;
-  const host = req.get('x-forwarded-host') || req.get('host');
-  const swaggerSpec = createSwaggerSpec(`${protocol}://${host}`);
-
-  return swaggerUi.setup(swaggerSpec, swaggerOptions)(req, res, next);
-};
-
-app.use('/api-docs', swaggerUi.serve, swaggerHandler);
+app.use('/swagger-assets', express.static(swaggerAssetPath));
+app.get('/api-docs', (req, res) => {
+  res.type('html').send(renderSwaggerPage(req));
+});
+app.get('/api-docs/', (req, res) => {
+  res.type('html').send(renderSwaggerPage(req));
+});
 app.get('/api-docs.json', (req, res) => {
   const protocol = req.get('x-forwarded-proto') || req.protocol;
   const host = req.get('x-forwarded-host') || req.get('host');
