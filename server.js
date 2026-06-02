@@ -32,6 +32,22 @@ app.use(express.urlencoded({ extended: true }));
 const swaggerOptions = {
   customSiteTitle: 'Trep Backend API Docs',
   explorer: true,
+  customCss: `
+    .swagger-ui .topbar {
+      background: linear-gradient(90deg, #0f172a, #1e293b);
+      padding: 10px 0;
+    }
+
+    .swagger-ui .topbar a span {
+      color: #f8fafc;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .swagger-ui .information-container {
+      padding-bottom: 12px;
+    }
+  `,
 };
 
 const swaggerHandler = (req, res, next) => {
@@ -43,7 +59,12 @@ const swaggerHandler = (req, res, next) => {
 };
 
 app.use('/api-docs', swaggerUi.serve, swaggerHandler);
-app.use('/', swaggerUi.serve, swaggerHandler);
+app.get('/api-docs.json', (req, res) => {
+  const protocol = req.get('x-forwarded-proto') || req.protocol;
+  const host = req.get('x-forwarded-host') || req.get('host');
+
+  res.json(createSwaggerSpec(`${protocol}://${host}`));
+});
 
 // Routes
 app.use('/api/contact-us', require('./routes/contactUsRoutes'));
@@ -57,6 +78,20 @@ app.use('/api/transportation-services', require('./routes/transportationServiceR
 app.use('/api/programs/hajj-umrah', require('./routes/hajjUmrahRoutes'));
 app.use('/api/programs/explore-kingdom', require('./routes/exploreKingdomRoutes'));
 app.use('/api/programs/explore-usa', require('./routes/exploreUSARoutes'));
+
+app.get('/', (req, res) => {
+  const protocol = req.get('x-forwarded-proto') || req.protocol;
+  const host = req.get('x-forwarded-host') || req.get('host');
+
+  res.status(200).json({
+    success: true,
+    name: 'Trep Backend API',
+    version: '1.0.0',
+    documentation: `${protocol}://${host}/api-docs/`,
+    openapi: `${protocol}://${host}/api-docs.json`,
+    health: `${protocol}://${host}/health`,
+  });
+});
 
 // Health Check Route
 app.get('/health', (req, res) => {
