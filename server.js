@@ -4,10 +4,11 @@ const cors = require('cors');
 const helmet = require('helmet');
 const swaggerUi = require('swagger-ui-express');
 const connectDB = require('./config/db');
-const swaggerSpec = require('./config/swagger');
+const createSwaggerSpec = require('./config/swagger');
 
 // Initialize Express
 const app = express();
+app.set('trust proxy', 1);
 
 // Middleware
 app.use(helmet({
@@ -28,10 +29,21 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Swagger Documentation
-const CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.3.0/swagger-ui.min.css";
+const swaggerOptions = {
+  customSiteTitle: 'Trep Backend API Docs',
+  explorer: true,
+};
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, { customCssUrl: CSS_URL }));
-app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerSpec, { customCssUrl: CSS_URL }));
+const swaggerHandler = (req, res, next) => {
+  const protocol = req.get('x-forwarded-proto') || req.protocol;
+  const host = req.get('x-forwarded-host') || req.get('host');
+  const swaggerSpec = createSwaggerSpec(`${protocol}://${host}`);
+
+  return swaggerUi.setup(swaggerSpec, swaggerOptions)(req, res, next);
+};
+
+app.use('/api-docs', swaggerUi.serve, swaggerHandler);
+app.use('/', swaggerUi.serve, swaggerHandler);
 
 // Routes
 app.use('/api/contact-us', require('./routes/contactUsRoutes'));
